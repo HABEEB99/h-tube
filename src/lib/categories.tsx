@@ -3,6 +3,7 @@ import { SiJavascript } from 'react-icons/si';
 import { FaMusic } from 'react-icons/fa';
 import { BsEmojiLaughing } from 'react-icons/bs';
 import { GiWorld } from 'react-icons/gi';
+import { BiMoviePlay } from 'react-icons/bi';
 
 export const categories = [
 	{
@@ -28,5 +29,9 @@ export const categories = [
 	{
 		name: 'health',
 		icon: <MdHealthAndSafety />,
+	},
+	{
+		name: 'movies',
+		icon: <BiMoviePlay />,
 	},
 ];

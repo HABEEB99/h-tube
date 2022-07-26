@@ -13,7 +13,7 @@ const MobileNavModals: React.FC<MobileNavModalsProps> = () => {
 	const { category } = router.query;
 
 	const activeCategory =
-		'text-sky-600 flex space-x-1 items-center text-md text-gray-400 cursor-pointer font-bold mt-2';
+		'text-blue-600 flex space-x-1 items-center text-md text-gray-400 cursor-pointer font-bold mt-2';
 	const normalCategory =
 		'flex space-x-1 items-center text-md text-gray-400 cursor-pointer hover:text-sky-500 mt-2';
 	const { theme, setTheme, systemTheme } = useTheme();

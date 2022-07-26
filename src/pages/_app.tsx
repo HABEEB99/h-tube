@@ -1,12 +1,19 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
+import NextNProgress from 'nextjs-progressbar';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<ThemeProvider attribute="class">
-			<Component {...pageProps} />
-		</ThemeProvider>
+		<GoogleOAuthProvider
+			clientId={`${process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENTID}`}
+		>
+			<ThemeProvider attribute="class">
+				<NextNProgress />
+				<Component {...pageProps} />
+			</ThemeProvider>
+		</GoogleOAuthProvider>
 	);
 }
 
