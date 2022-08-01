@@ -7,6 +7,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 		const data = await client.fetch(postsQuery);
 
 		res.status(200).json(data);
+	} else if (req.method === 'POST') {
+		const postDoc = req.body;
+
+		client
+			.create(postDoc)
+			.then(() => res.status(201).json('Posted Successfully'));
 	}
 };
 

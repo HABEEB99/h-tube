@@ -41,7 +41,7 @@ const MobileNavModals: React.FC<MobileNavModalsProps> = () => {
 	};
 
 	return (
-		<div className="w-[80%] h-[80%] absolute top-20 right-4 bg-gray-300 rounded-md flex flex-col justify-between p-2">
+		<div className="w-[80%] z-10 h-[80%] absolute top-20 right-4 bg-gray-300 dark:bg-gray-600 rounded-md flex flex-col justify-between p-2">
 			<div>
 				<h2 className="text-2xl font-bold">Categories</h2>
 				{categories.map((item) => (

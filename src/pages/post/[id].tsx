@@ -79,7 +79,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 								<BsArrow90DegDown className="text-2xl text-btn mt-6 font-bold" />
 								<h4 className="font-bold text-2xl">Comments</h4>
 							</div>
-							{post.comments.map((comment) => (
+							{post.comments?.map((comment) => (
 								<div key={comment._key} className="w-full flex items-center">
 									<div className="w-[70%]">
 										<p>{comment.comment}</p>

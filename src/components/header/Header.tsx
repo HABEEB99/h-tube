@@ -79,10 +79,10 @@ const Header: React.FC<HeaderProps> = () => {
 
 			{openLogoutBtn && (
 				<div
-					className="absolute top-[11vh] right-4 md:right-6  transition-transform duration-200 ease-out"
+					className="absolute top-[11vh] right-4 md:right-6 z-10 transition-transform duration-200 ease-out"
 					onClick={handleLogout}
 				>
-					<Button className="w-32 h-10 gap-2 rounded-lg flex items-center justify-center z-10 text-xl font-bold bg-red-600 hover:bg-red-800">
+					<Button className="w-32 h-10 gap-2 rounded-lg flex items-center justify-center  text-xl font-bold bg-red-600 hover:bg-red-800">
 						<BiLogOutCircle className="" />
 						Logout
 					</Button>

@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNProgress from 'nextjs-progressbar';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Toaster } from 'react-hot-toast';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
@@ -11,6 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		>
 			<ThemeProvider attribute="class">
 				<NextNProgress />
+				<Toaster />
 				<Component {...pageProps} />
 			</ThemeProvider>
 		</GoogleOAuthProvider>
