@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player/lazy';
 import { PostProp } from '../../../typings';
 import Button from '../../components/button/Button';
@@ -11,14 +11,30 @@ import CreatePost from '../../components/create-post/CreatePost';
 
 import { BsArrow90DegDown, BsArrowLeft } from 'react-icons/bs';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
+import { useAuthStore } from '../../store/authStore';
+import LikePost from '../../components/like-post/LikePost';
 
 type PostDetailsProps = {
 	post: PostProp;
 };
 
 const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
+	const { user }: { user: any } = useAuthStore();
+
+	const [postData, setPostData] = useState(post);
 	const [playVideo, setPlayVideo] = useState(false);
-	const [liked, setLiked] = useState(false);
+
+	const likePost = async (like: boolean) => {
+		if (user) {
+			const response = await axios.put(`${BASE_URL}/api/likepost`, {
+				userId: user._id,
+				postId: post._id,
+				like,
+			});
+
+			setPostData({ ...postData, likes: response.data.likes });
+		}
+	};
 
 	return (
 		<PageLayout title="POST DETAILS" description="Post details page">
@@ -40,7 +56,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 							className="pt-[56.25%] relative h-96"
 						>
 							<ReactPlayer
-								url={post.video?.asset.url}
+								url={postData.video?.asset.url}
 								controls={playVideo}
 								width="100%"
 								height="100%"
@@ -49,14 +65,14 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 						</div>
 
 						<div className="flex items-center justify-between">
-							<h3>{`${post.title} (${post.category})`}</h3>
-							<span className="text-xl font-bold cursor-pointer text-red-600">
-								{liked ? (
-									<AiFillLike onClick={() => setLiked((prev) => !prev)} />
-								) : (
-									<AiOutlineLike onClick={() => setLiked((prev) => !prev)} />
-								)}
-							</span>
+							<h3>{`${postData.title} (${postData.category})`}</h3>
+							{user && (
+								<LikePost
+									upVote={() => likePost(true)}
+									downVote={() => likePost(false)}
+									likes={postData.likes}
+								/>
+							)}
 						</div>
 
 						<div className="w-full h-60">
@@ -64,7 +80,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 								<span className="text-lg font-bold dark:text-gray-200 text-gray-600">
 									Description :
 								</span>{' '}
-								{post.caption}
+								{postData.caption}
 							</p>
 						</div>
 					</div>
@@ -79,7 +95,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 								<BsArrow90DegDown className="text-2xl text-btn mt-6 font-bold" />
 								<h4 className="font-bold text-2xl">Comments</h4>
 							</div>
-							{post.comments?.map((comment) => (
+							{postData.comments?.map((comment) => (
 								<div key={comment._key} className="w-full flex items-center">
 									<div className="w-[70%]">
 										<p>{comment.comment}</p>
