@@ -7,12 +7,13 @@ import Button from '../../components/button/Button';
 import PageLayout from '../../components/layout/PageLayout';
 import { BASE_URL } from '../../lib/utils';
 import Image from 'next/image';
-import CreatePost from '../../components/create-post/CreatePost';
 
 import { BsArrow90DegDown, BsArrowLeft } from 'react-icons/bs';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { useAuthStore } from '../../store/authStore';
 import LikePost from '../../components/like-post/LikePost';
+import CreateComment from '../../components/create-comment/CreateComment';
+import toast from 'react-hot-toast';
 
 type PostDetailsProps = {
 	post: PostProp;
@@ -24,15 +25,33 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 	const [postData, setPostData] = useState(post);
 	const [playVideo, setPlayVideo] = useState(false);
 
+	const [posting, setPosting] = useState(false);
+	const [comment, setComment] = useState('');
+
 	const likePost = async (like: boolean) => {
 		if (user) {
-			const response = await axios.put(`${BASE_URL}/api/likepost`, {
+			const { data } = await axios.put(`${BASE_URL}/api/likepost`, {
 				userId: user._id,
 				postId: post._id,
 				like,
 			});
 
-			setPostData({ ...postData, likes: response.data.likes });
+			setPostData({ ...postData, likes: data.likes });
+		}
+	};
+
+	const postComment = async (e: any) => {
+		e.preventDefault();
+		if (user && comment) {
+			const { data } = await axios.put(`${BASE_URL}/api/posts/${post._id}`, {
+				userId: user._id,
+				comment,
+			});
+			setPostData({ ...postData, comments: data.comments });
+			setComment('');
+			setPosting(false);
+		} else {
+			return toast.error('You must login before you can add a comment');
 		}
 	};
 
@@ -87,36 +106,53 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
 
 					<div className="w-full lg:w-[50%] lg:px-4 py-2 flex flex-col">
 						<div className=" w-full">
-							<CreatePost />
+							<CreateComment
+								comment={comment}
+								setComment={setComment}
+								postComment={postComment}
+								posting={posting}
+							/>
 						</div>
 
 						<div className="w-full mt-3 md:mt-6">
-							<div className="flex items-center space-x-1">
-								<BsArrow90DegDown className="text-2xl text-btn mt-6 font-bold" />
-								<h4 className="font-bold text-2xl">Comments</h4>
-							</div>
-							{postData.comments?.map((comment) => (
-								<div key={comment._key} className="w-full flex items-center">
-									<div className="w-[70%]">
-										<p>{comment.comment}</p>
+							{postData.comments ? (
+								<>
+									{' '}
+									<div className="flex items-center space-x-1">
+										<BsArrow90DegDown className="text-2xl text-btn mt-6 font-bold" />
+										<h4 className="font-bold text-2xl">Comments</h4>
 									</div>
+									<div className="max-h-[20rem] w-full overflow-y-auto">
+										{postData.comments?.map((comment) => (
+											<div
+												key={comment._key}
+												className="w-full flex items-center  "
+											>
+												<div className="w-[70%]">
+													<p>{comment.comment}</p>
+												</div>
 
-									<div className="flex items-center space-x-1 my-4">
-										<div className="relative w-6 h-6 rounded-full">
-											<Image
-												src={comment.postedBy.picture}
-												alt="user pic"
-												layout="fill"
-												objectFit="cover"
-												className="rounded-full"
-											/>
-										</div>
-										<span className="text-base text-gray-400 dark:text-gray-400">
-											{comment.postedBy.userName}
-										</span>
+												<div className="flex items-center space-x-1 my-4">
+													<div className="relative w-6 h-6 rounded-full">
+														<Image
+															src={comment.postedBy.picture}
+															alt="user pic"
+															layout="fill"
+															objectFit="cover"
+															className="rounded-full"
+														/>
+													</div>
+													<span className="text-base text-gray-400 dark:text-gray-400">
+														{comment.postedBy.userName}
+													</span>
+												</div>
+											</div>
+										))}
 									</div>
-								</div>
-							))}
+								</>
+							) : (
+								<span>There's no comments</span>
+							)}
 						</div>
 					</div>
 				</div>
