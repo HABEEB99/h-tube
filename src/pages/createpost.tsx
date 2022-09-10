@@ -17,6 +17,12 @@ import toast from "react-hot-toast";
 
 type CreatePostProps = {};
 
+interface FormInputs {
+  category: string;
+  title: string;
+  caption: string;
+}
+
 const CreatePost: React.FC<CreatePostProps> = () => {
   const router = useRouter();
 
@@ -115,7 +121,7 @@ const CreatePost: React.FC<CreatePostProps> = () => {
                   />
                 </div>
 
-                <div onClick={() => setVideoFile(null)}>
+                <div onClick={() => setVideoFile(null!)}>
                   <Button className="w-40 h-10 bg-red-600 hover:bg-red-800 text-white">
                     Remove Video
                   </Button>
