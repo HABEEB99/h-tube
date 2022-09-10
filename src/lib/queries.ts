@@ -33,7 +33,7 @@ export const postsQuery = `*[_type == 'post']{
   }`;
 
 export const postDetailsQuery = (id: string | string[]) => {
-	const query = `*[_type == "post" && _id == '${id}']{
+  const query = `*[_type == "post" && _id == '${id}']{
         _id,
         _createdAt,
         category,
@@ -66,8 +66,38 @@ export const postDetailsQuery = (id: string | string[]) => {
            },
        },
       }`;
-	return query;
+  return query;
 };
+
+// export const searchPostsQuery = (searchTerm: string | string[]) => {
+//   const query = `*[_type == "post" && caption match '${searchTerm}*' || topic match '${searchTerm}*'] {
+//     _id,
+//      caption,
+//        video{
+//         asset->{
+//           _id,
+//           url
+//         }
+//       },
+//       userId,
+//     postedBy->{
+//       _id,
+//       userName,
+//       image
+//     },
+// likes,
+//     comments[]{
+//       comment,
+//       _key,
+//       postedBy->{
+//       _id,
+//       userName,
+//       image
+//     },
+//     }
+//   }`;
+//   return query;
+// };
 
 // export const postQuery = `*[_type == 'post' && slug.current == $slug][0]{
 //     _id,

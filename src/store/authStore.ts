@@ -1,10 +1,19 @@
-import create from 'zustand';
-import { persist } from 'zustand/middleware';
+import create from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { UserDetailsProps } from "../../typings";
 
-const authStore = (set: any) => ({
-	user: null,
-	addUser: (userDetails: any) => set({ user: userDetails }),
-	removeUser: () => set({ user: null }),
-});
+interface Authstore {
+  user: any;
+  addUser: (newUser: UserDetailsProps) => void;
+  removeUser: () => void;
+}
 
-export const useAuthStore = create(persist(authStore, { name: 'auth' }));
+export const useAuthStore = create<Authstore>()(
+  devtools(
+    persist((set) => ({
+      user: null,
+      addUser: (newUser) => set({ user: newUser }),
+      removeUser: () => set({ user: null }),
+    }))
+  )
+);
